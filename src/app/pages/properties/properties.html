@@ -1,1 +1,30 @@
-<p>properties works!</p>
+<div class="container mt-4">
+  <div class="row">
+    <div class="col-12 mb-4">
+      <h2>Available Properties</h2>
+      <hr>
+    </div>
+
+    @for (property of propertyList(); track property.id) {
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ property.title }}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">{{ property.location }}</h6>
+            <p class="card-text mt-3">
+              <strong>Price:</strong> LKR {{ property.price }}<br>
+              <strong>Type:</strong> {{ property.propertyType }}
+            </p>
+            <span class="badge bg-primary">{{ property.status }}</span>
+          </div>
+        </div>
+      </div>
+    } @empty {
+      <div class="col-12">
+        <div class="alert alert-warning text-center">
+          No properties found. Is your Spring Boot server running?
+        </div>
+      </div>
+    }
+  </div>
+</div>
