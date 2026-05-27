@@ -1,30 +1,48 @@
 <div class="container mt-4">
   <div class="row">
-    <div class="col-12 mb-4">
-      <h2>Available Properties</h2>
+    <div class="col-12 mb-3">
+      <h2>Property Listings</h2>
       <hr>
     </div>
 
-    @for (property of propertyList(); track property.id) {
-      <div class="col-md-4 mb-4">
-        <div class="card shadow-sm h-100">
-          <div class="card-body">
-            <h5 class="card-title">{{ property.title }}</h5>
-            <h6 class="card-subtitle mb-2 text-muted">{{ property.location }}</h6>
-            <p class="card-text mt-3">
-              <strong>Price:</strong> LKR {{ property.price }}<br>
-              <strong>Type:</strong> {{ property.propertyType }}
-            </p>
-            <span class="badge bg-primary">{{ property.status }}</span>
-          </div>
+    <div class="col-12 mb-4">
+      <div class="btn-group shadow-sm">
+        <button class="btn" [class.btn-primary]="currentFilter() === 'All'"
+          [class.btn-outline-primary]="currentFilter() !== 'All'" (click)="setFilter('All')">All</button>
+        <button class="btn" [class.btn-success]="currentFilter() === 'Available'"
+          [class.btn-outline-success]="currentFilter() !== 'Available'"
+          (click)="setFilter('Available')">Available</button>
+        <button class="btn" [class.btn-warning]="currentFilter() === 'Rented'"
+          [class.btn-outline-warning]="currentFilter() !== 'Rented'" (click)="setFilter('Rented')">Rented</button>
+        <button class="btn" [class.btn-danger]="currentFilter() === 'Sold'"
+          [class.btn-outline-danger]="currentFilter() !== 'Sold'" (click)="setFilter('Sold')">Sold</button>
+      </div>
+    </div>
+
+    @for (property of filteredProperties(); track property.id) {
+    <div class="col-md-4 mb-4">
+      <div class="card shadow-sm h-100">
+        <div class="card-body">
+          <h5 class="card-title">{{ property.title }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted">{{ property.location }}</h6>
+          <p class="card-text mt-3">
+            <strong>Price:</strong> LKR {{ property.price }}<br>
+            <strong>Type:</strong> {{ property.propertyType }}
+          </p>
+
+          <span class="badge" [class.bg-success]="property.status === 'Available'"
+            [class.bg-warning]="property.status === 'Rented'" [class.bg-danger]="property.status === 'Sold'">
+            {{ property.status }}
+          </span>
         </div>
       </div>
+    </div>
     } @empty {
-      <div class="col-12">
-        <div class="alert alert-warning text-center">
-          No properties found. Is your Spring Boot server running?
-        </div>
+    <div class="col-12">
+      <div class="alert alert-warning text-center">
+        No properties found in this category.
       </div>
+    </div>
     }
   </div>
 </div>
