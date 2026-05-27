@@ -6,11 +6,16 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class Property {
-  private apiUrl = 'http://localhost:8080/api/properties/all';
+  private apiUrl = 'http://localhost:8080/api/properties';
 
   constructor(private http: HttpClient) { }
 
   getAllProperties(): Observable<any> {
-    return this.http.get(this.apiUrl);
+    return this.http.get(`${this.apiUrl}/all`);
   }
+
+  addProperty(propertyData: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/add`, propertyData);
+  }
+  
 }

@@ -7,28 +7,28 @@
         </div>
         <div class="card-body bg-light">
           
-          <form>
+<form>
             <div class="mb-3">
               <label class="form-label fw-bold">Property Title</label>
-              <input type="text" class="form-control" placeholder="e.g., Luxury 3-Bedroom Villa">
+              <input type="text" name="title" [(ngModel)]="propertyObj.title" class="form-control" placeholder="e.g., Luxury 3-Bedroom Villa">
             </div>
 
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label fw-bold">Location</label>
-                <input type="text" class="form-control" placeholder="e.g., Ratnapura Area">
+                <input type="text" name="location" [(ngModel)]="propertyObj.location" class="form-control" placeholder="e.g., Ratnapura Area">
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label fw-bold">Price (LKR)</label>
-                <input type="number" class="form-control" placeholder="e.g., 450000">
+                <input type="number" name="price" [(ngModel)]="propertyObj.price" class="form-control" placeholder="e.g., 9000000">
               </div>
             </div>
 
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label fw-bold">Property Type</label>
-                <select class="form-select">
-                  <option value="" disabled selected>Select a type...</option>
+                <select name="propertyType" [(ngModel)]="propertyObj.propertyType" class="form-select">
+                  <option value="" disabled>Select a type...</option>
                   <option value="House">House</option>
                   <option value="Apartment">Apartment</option>
                   <option value="Commercial">Commercial</option>
@@ -37,8 +37,8 @@
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label fw-bold">Status</label>
-                <select class="form-select">
-                  <option value="Available" selected>Available</option>
+                <select name="status" [(ngModel)]="propertyObj.status" class="form-select">
+                  <option value="Available">Available</option>
                   <option value="Sold">Sold</option>
                   <option value="Rented">Rented</option>
                 </select>
@@ -46,7 +46,7 @@
             </div>
 
             <div class="d-grid mt-4">
-              <button type="button" class="btn btn-primary btn-lg">Save Property</button>
+              <button type="button" (click)="saveProperty()" class="btn btn-primary btn-lg">Save Property</button>
             </div>
           </form>
 
