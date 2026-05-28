@@ -1,1 +1,55 @@
-<p>login works!</p>
+<div class="container mt-5">
+  <div class="row align-items-stretch">
+    
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-lg h-100">
+        <div class="card-header bg-dark text-white text-center">
+          <h3 class="mb-0">Welcome Back</h3>
+        </div>
+        <div class="card-body bg-light p-4">
+          <form>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Email address</label>
+              <input type="email" name="loginEmail" [(ngModel)]="loginObj.email" class="form-control" placeholder="name@example.com">
+            </div>
+            <div class="mb-4">
+              <label class="form-label fw-bold">Password</label>
+              <input type="password" name="loginPassword" [(ngModel)]="loginObj.password" class="form-control" placeholder="Enter password">
+            </div>
+            <div class="d-grid">
+              <button type="button" class="btn btn-primary btn-lg" (click)="onLogin()">Login</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6 mb-4">
+      <div class="card shadow-lg h-100 border-primary">
+        <div class="card-header bg-primary text-white text-center">
+          <h3 class="mb-0">Create an Account</h3>
+        </div>
+        <div class="card-body p-4">
+          <form>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Full Name</label>
+              <input type="text" name="registerName" [(ngModel)]="registerObj.name" class="form-control" placeholder="John Doe">
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Email address</label>
+              <input type="email" name="registerEmail" [(ngModel)]="registerObj.email" class="form-control" placeholder="name@example.com">
+            </div>
+            <div class="mb-4">
+              <label class="form-label fw-bold">Password</label>
+              <input type="password" name="registerPassword" [(ngModel)]="registerObj.password" class="form-control" placeholder="Create a password">
+            </div>
+            <div class="d-grid">
+              <button type="button" class="btn btn-outline-primary btn-lg" (click)="onRegister()">Register</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
