@@ -18,4 +18,8 @@ export class UserService {
     login(credentials: any): Observable<any> {
         return this.http.post(`${this.apiUrl}/login`, credentials);
     }
+
+    getAllUsers(): Observable<any> {
+        return this.http.get(`${this.apiUrl}/all`);
+    }
 }
