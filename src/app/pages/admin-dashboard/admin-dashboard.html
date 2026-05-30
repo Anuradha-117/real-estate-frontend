@@ -1,13 +1,10 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-8">
+<div class="container mt-5 mb-5"> <div class="row justify-content-center mb-5"> <div class="col-md-8">
       <div class="card shadow-lg">
         <div class="card-header bg-dark text-white">
           <h3 class="mb-0">Add New Property</h3>
         </div>
         <div class="card-body bg-light">
-          
-<form>
+          <form>
             <div class="mb-3">
               <label class="form-label fw-bold">Property Title</label>
               <input type="text" name="title" [(ngModel)]="propertyObj.title" class="form-control" placeholder="e.g., Luxury 3-Bedroom Villa">
@@ -49,9 +46,93 @@
               <button type="button" (click)="saveProperty()" class="btn btn-primary btn-lg">Save Property</button>
             </div>
           </form>
-
         </div>
       </div>
     </div>
   </div>
+
+  <div class="row justify-content-center mb-5">
+    <div class="col-md-8">
+      <div class="card shadow-lg">
+        <div class="card-header bg-dark text-white">
+          <h3 class="mb-0">Register System Staff</h3>
+        </div>
+        <div class="card-body bg-light">
+          <form>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Full Name</label>
+                <input type="text" name="name" [(ngModel)]="staffObj.name" class="form-control" placeholder="e.g., John Doe">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Email</label>
+                <input type="email" name="email" [(ngModel)]="staffObj.email" class="form-control" placeholder="agent@system.com">
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Password</label>
+                <input type="password" name="password" [(ngModel)]="staffObj.password" class="form-control" placeholder="Create a password">
+              </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Assign Role</label>
+                <select name="role" [(ngModel)]="staffObj.role" class="form-select">
+                  <option value="Agent">Agent</option>
+                  <option value="Seller">Seller</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="d-grid mt-4">
+              <button type="button" (click)="registerStaff()" class="btn btn-success btn-lg">Create Account</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row justify-content-center">
+    <div class="col-md-10"> <div class="card shadow-lg">
+        <div class="card-header bg-dark text-white">
+          <h3 class="mb-0">System Users</h3>
+        </div>
+        <div class="card-body p-0"> <table class="table table-striped table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of userList; track user.id) {
+                <tr>
+                  <td class="fw-bold">{{ user.id }}</td>
+                  <td>{{ user.name }}</td>
+                  <td>{{ user.email }}</td>
+                  <td>
+                    <span class="badge" 
+                          [class.bg-primary]="user.role === 'Admin'"
+                          [class.bg-success]="user.role === 'Agent'"
+                          [class.bg-warning]="user.role === 'Seller'"
+                          [class.bg-secondary]="user.role === 'Customer'">
+                      {{ user.role }}
+                    </span>
+                  </td>
+                </tr>
+              } @empty {
+                <tr>
+                  <td colspan="4" class="text-center text-muted py-3">No users found.</td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
