@@ -27,7 +27,10 @@ export class AppComponent {
   }
 
   logout() {
-    localStorage.removeItem('loggedUser');
-    this.router.navigate(['/login']);
+    const isSure = confirm("Are you sure you want to log out?");
+    if (isSure) {
+      localStorage.removeItem('loggedUser');
+      this.router.navigate(['/login']);
+    }
   }
 }
