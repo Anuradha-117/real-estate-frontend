@@ -30,12 +30,14 @@ export class Login {
   onRegister() {
     this.userService.register(this.registerObj).subscribe({
       next: (res) => {
-        alert('Registration Successful! You can now log in.');
+        alert('Registration Successful! Welcome to the Real Estate System.');
+        localStorage.setItem('loggedUser', JSON.stringify(res));
         this.registerObj = { name: '', email: '', password: '' };
+        this.router.navigate(['/']);
       },
       error: (err) => {
-        alert('Registration Failed. This email may already be in use. Please try again.');
-        console.error('System Error:', err); //to see by devs
+        alert('Registration Failed. This email may already be in use.');
+        console.error('System Error:', err);
       }
     });
   }
@@ -44,20 +46,18 @@ export class Login {
     this.userService.login(this.loginObj).subscribe({
       next: (res) => {
         if (res) {
-          alert(`Welcome back, ${res.name}!`);
           localStorage.setItem('loggedUser', JSON.stringify(res));
+
           const userRole = res.role.toLowerCase();
 
           if (userRole === 'admin') {
             this.router.navigate(['/admin-dashboard']);
           } else if (userRole === 'agent') {
-            //need to do
             this.router.navigate(['/']);
           } else if (userRole === 'seller') {
-            // need to to
             this.router.navigate(['/']);
           } else {
-            this.router.navigate(['/properties']);
+            this.router.navigate(['/']);
           }
 
         } else {
