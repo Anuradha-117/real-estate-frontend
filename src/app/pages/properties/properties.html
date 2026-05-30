@@ -20,8 +20,13 @@
     </div>
 
     @for (property of filteredProperties(); track property.id) {
+      
     <div class="col-md-4 mb-4">
       <div class="card shadow-sm h-100">
+        <img src="/property_placeholder.jpg" 
+       class="card-img-top" 
+       alt="Real Estate Property" 
+       style="height: 220px; object-fit: cover;">
         <div class="card-body">
           <h5 class="card-title">{{ property.title }}</h5>
           <h6 class="card-subtitle mb-2 text-muted">{{ property.location }}</h6>
