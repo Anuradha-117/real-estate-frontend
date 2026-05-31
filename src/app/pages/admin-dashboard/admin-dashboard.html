@@ -1,168 +1,248 @@
 <div class="container mt-5 mb-5">
-  
+
+  <!-- DYNAMIC DASHBOARD TITLE                    -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="fw-bold border-bottom pb-2 text-primary">
+        @if (userRole === 'Admin') { Admin Control Panel }
+        @else if (userRole === 'Seller') { Seller Portal }
+        @else if (userRole === 'Agent') { Agent Dashboard }
+        @else { User Dashboard }
+      </h2>
+    </div>
+  </div>
+
+
+  <!-- SMART ROLE-BASED TABS NAVIGATION           -->
   <ul class="nav nav-tabs mb-4 fw-bold">
+    @if (userRole === 'Admin' || userRole === 'Seller') {
     <li class="nav-item">
-      <a class="nav-link text-dark" [class.active]="activeTab === 'addProperty'" (click)="activeTab = 'addProperty'" style="cursor: pointer;">
+      <a class="nav-link text-dark" [class.active]="activeTab === 'addProperty'" (click)="activeTab = 'addProperty'"
+        style="cursor: pointer;">
         <i class="bi bi-house-add-fill me-2"></i>Add Property
       </a>
     </li>
+    }
+
+    @if (userRole === 'Admin') {
     <li class="nav-item">
-      <a class="nav-link text-dark" [class.active]="activeTab === 'registerStaff'" (click)="activeTab = 'registerStaff'" style="cursor: pointer;">
+      <a class="nav-link text-dark" [class.active]="activeTab === 'registerStaff'" (click)="activeTab = 'registerStaff'"
+        style="cursor: pointer;">
         <i class="bi bi-person-plus-fill me-2"></i>Register Staff
       </a>
     </li>
     <li class="nav-item">
-      <a class="nav-link text-dark" [class.active]="activeTab === 'users'" (click)="activeTab = 'users'" style="cursor: pointer;">
+      <a class="nav-link text-dark" [class.active]="activeTab === 'users'" (click)="activeTab = 'users'"
+        style="cursor: pointer;">
         <i class="bi bi-people-fill me-2"></i>Manage Users
       </a>
     </li>
+    }
+
+    @if (userRole === 'Admin' || userRole === 'Agent') {
+    <li class="nav-item">
+      <a class="nav-link text-dark" [class.active]="activeTab === 'inquiries'" (click)="activeTab = 'inquiries'"
+        style="cursor: pointer;">
+        <i class="bi bi-envelope-fill me-2"></i>View Inquiries
+      </a>
+    </li>
+    }
   </ul>
 
+  <!-- ADD PROPERTY TAB                        -->
   @if (activeTab === 'addProperty') {
-    <div class="row justify-content-center animation-fade-in">
-      <div class="col-md-8">
-        <div class="card shadow-lg border-0">
-          <div class="card-header bg-dark text-white">
-            <h3 class="mb-0">Add New Property</h3>
-          </div>
-          <div class="card-body bg-light">
-            <form>
-              <div class="mb-3">
-                <label class="form-label fw-bold">Property Title</label>
-                <input type="text" name="title" [(ngModel)]="propertyObj.title" class="form-control" placeholder="e.g., Luxury 3-Bedroom Villa">
+  <div class="row justify-content-center animation-fade-in">
+    <div class="col-md-8">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-dark text-white">
+          <h3 class="mb-0">Add New Property</h3>
+        </div>
+        <div class="card-body bg-light">
+          <form>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Property Title</label>
+              <input type="text" name="title" [(ngModel)]="propertyObj.title" class="form-control"
+                placeholder="e.g., Luxury 3-Bedroom Villa">
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Location</label>
+                <input type="text" name="location" [(ngModel)]="propertyObj.location" class="form-control"
+                  placeholder="e.g., Ratnapura Area">
               </div>
-
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-bold">Location</label>
-                  <input type="text" name="location" [(ngModel)]="propertyObj.location" class="form-control" placeholder="e.g., Ratnapura Area">
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-bold">Price (LKR)</label>
-                  <input type="number" name="price" [(ngModel)]="propertyObj.price" class="form-control" placeholder="e.g., 9000000">
-                </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Price (LKR)</label>
+                <input type="number" name="price" [(ngModel)]="propertyObj.price" class="form-control"
+                  placeholder="e.g., 9000000">
               </div>
-
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-bold">Property Type</label>
-                  <select name="propertyType" [(ngModel)]="propertyObj.propertyType" class="form-select">
-                    <option value="" disabled>Select a type...</option>
-                    <option value="House">House</option>
-                    <option value="Apartment">Apartment</option>
-                    <option value="Commercial">Commercial</option>
-                    <option value="Land">Land</option>
-                  </select>
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-bold">Status</label>
-                  <select name="status" [(ngModel)]="propertyObj.status" class="form-select">
-                    <option value="Available">Available</option>
-                    <option value="Sold">Sold</option>
-                    <option value="Rented">Rented</option>
-                  </select>
-                </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Property Type</label>
+                <select name="propertyType" [(ngModel)]="propertyObj.propertyType" class="form-select">
+                  <option value="" disabled>Select a type...</option>
+                  <option value="House">House</option>
+                  <option value="Apartment">Apartment</option>
+                  <option value="Commercial">Commercial</option>
+                  <option value="Land">Land</option>
+                </select>
               </div>
-
-              <div class="d-grid mt-4">
-                <button type="button" (click)="saveProperty()" class="btn btn-primary btn-lg">Save Property</button>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Status</label>
+                <select name="status" [(ngModel)]="propertyObj.status" class="form-select">
+                  <option value="Available">Available</option>
+                  <option value="Sold">Sold</option>
+                  <option value="Rented">Rented</option>
+                </select>
               </div>
-            </form>
-          </div>
+            </div>
+            <div class="d-grid mt-4">
+              <button type="button" (click)="saveProperty()" class="btn btn-primary btn-lg">Save Property</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
+  </div>
   }
 
+  <!-- REGISTER STAFF TAB                      -->
   @if (activeTab === 'registerStaff') {
-    <div class="row justify-content-center animation-fade-in">
-      <div class="col-md-8">
-        <div class="card shadow-lg border-0">
-          <div class="card-header bg-dark text-white">
-            <h3 class="mb-0">Register System Staff</h3>
-          </div>
-          <div class="card-body bg-light">
-            <form>
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-bold">Full Name</label>
-                  <input type="text" name="name" [(ngModel)]="staffObj.name" class="form-control" placeholder="e.g., John Doe">
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-bold">Email</label>
-                  <input type="email" name="email" [(ngModel)]="staffObj.email" class="form-control" placeholder="agent@system.com">
-                </div>
+  <div class="row justify-content-center animation-fade-in">
+    <div class="col-md-8">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-dark text-white">
+          <h3 class="mb-0">Register System Staff</h3>
+        </div>
+        <div class="card-body bg-light">
+          <form>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Full Name</label>
+                <input type="text" name="name" [(ngModel)]="staffObj.name" class="form-control"
+                  placeholder="e.g., John Doe">
               </div>
-
-              <div class="row">
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-bold">Password</label>
-                  <input type="password" name="password" [(ngModel)]="staffObj.password" class="form-control" placeholder="Create a password">
-                </div>
-                <div class="col-md-6 mb-3">
-                  <label class="form-label fw-bold">Assign Role</label>
-                  <select name="role" [(ngModel)]="staffObj.role" class="form-select">
-                    <option value="Agent">Agent</option>
-                    <option value="Seller">Seller</option>
-                  </select>
-                </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Email</label>
+                <input type="email" name="email" [(ngModel)]="staffObj.email" class="form-control"
+                  placeholder="agent@system.com">
               </div>
-
-              <div class="d-grid mt-4">
-                <button type="button" (click)="registerStaff()" class="btn btn-success btn-lg">Create Account</button>
+            </div>
+            <div class="row">
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Password</label>
+                <input type="password" name="password" [(ngModel)]="staffObj.password" class="form-control"
+                  placeholder="Create a password">
               </div>
-            </form>
-          </div>
+              <div class="col-md-6 mb-3">
+                <label class="form-label fw-bold">Assign Role</label>
+                <select name="role" [(ngModel)]="staffObj.role" class="form-select">
+                  <option value="Agent">Agent</option>
+                  <option value="Seller">Seller</option>
+                </select>
+              </div>
+            </div>
+            <div class="d-grid mt-4">
+              <button type="button" (click)="registerStaff()" class="btn btn-success btn-lg">Create Account</button>
+            </div>
+          </form>
         </div>
       </div>
     </div>
+  </div>
   }
 
+
+  <!-- USERS TABLE TAB                         -->
   @if (activeTab === 'users') {
-    <div class="row justify-content-center animation-fade-in">
-      <div class="col-md-10">
-        <div class="card shadow-lg border-0">
-          <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-            <h3 class="mb-0">System Users</h3>
-            <button class="btn btn-sm btn-outline-light" (click)="loadUsers()">Refresh Table</button>
-          </div>
-          <div class="card-body p-0">
-            <table class="table table-striped table-hover mb-0">
-              <thead class="table-light">
-                <tr>
-                  <th>ID</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Role</th>
-                </tr>
-              </thead>
-              <tbody>
-                @for (user of userList; track user.id) {
-                  <tr>
-                    <td class="fw-bold">{{ user.id }}</td>
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>
-                      <span class="badge" 
-                            [class.bg-primary]="user.role === 'Admin'"
-                            [class.bg-success]="user.role === 'Agent'"
-                            [class.bg-warning]="user.role === 'Seller'"
-                            [class.bg-secondary]="user.role === 'Customer'">
-                        {{ user.role }}
-                      </span>
-                    </td>
-                  </tr>
-                } @empty {
-                  <tr>
-                    <td colspan="4" class="text-center text-muted py-3">No users found.</td>
-                  </tr>
-                }
-              </tbody>
-            </table>
-          </div>
+  <div class="row justify-content-center animation-fade-in">
+    <div class="col-md-10">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">System Users</h3>
+          <button class="btn btn-sm btn-outline-light" (click)="loadUsers()">Refresh Table</button>
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-striped table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (user of userList; track user.id) {
+              <tr>
+                <td class="fw-bold">{{ user.id }}</td>
+                <td>{{ user.name }}</td>
+                <td>{{ user.email }}</td>
+                <td>
+                  <span class="badge" [class.bg-primary]="user.role === 'Admin'"
+                    [class.bg-success]="user.role === 'Agent'" [class.bg-warning]="user.role === 'Seller'"
+                    [class.bg-secondary]="user.role === 'Customer'">
+                    {{ user.role }}
+                  </span>
+                </td>
+              </tr>
+              } @empty {
+              <tr>
+                <td colspan="4" class="text-center text-muted py-3">No users found.</td>
+              </tr>
+              }
+            </tbody>
+          </table>
         </div>
       </div>
     </div>
+  </div>
+  }
+
+  <!-- VIEW INQUIRIES TAB                  -->
+  @if (activeTab === 'inquiries') {
+  <div class="row justify-content-center animation-fade-in">
+    <div class="col-md-12">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">Customer Inquiries</h3>
+          <button class="btn btn-sm btn-outline-light" (click)="loadInquiries()">Refresh Table</button>
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-striped table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>Date</th>
+                <th>Customer Email</th>
+                <th>Phone</th>
+                <th>Prop ID</th>
+                <th>Message</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (inquiry of inquiryList; track inquiry.id) {
+              <tr>
+                <td>{{ inquiry.inquiryDate | date:'shortDate' }}</td>
+                <td class="fw-bold">{{ inquiry.customerEmail }}</td>
+                <td>{{ inquiry.contactNumber }}</td>
+                <td class="text-center fw-bold text-primary">#{{ inquiry.propertyId }}</td>
+                <td><em>"{{ inquiry.message }}"</em></td>
+                <td>
+                  <span class="badge bg-warning text-dark">{{ inquiry.status }}</span>
+                </td>
+              </tr>
+              } @empty {
+              <tr>
+                <td colspan="6" class="text-center text-muted py-4">No inquiries found.</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
   }
 
 </div>

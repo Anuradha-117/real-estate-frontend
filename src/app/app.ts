@@ -33,4 +33,13 @@ export class AppComponent {
       this.router.navigate(['/login']);
     }
   }
+
+  get userRole(): string {
+    const userStr = localStorage.getItem('loggedUser');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      return user.role ? user.role : '';
+    }
+    return '';
+  }
 }

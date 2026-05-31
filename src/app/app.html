@@ -12,9 +12,13 @@
           <a class="nav-link" routerLink="/properties">Properties</a>
         </li>
 
-        @if (isAdmin) {
+        @if (userRole === 'Admin' || userRole === 'Seller' || userRole === 'Agent') {
         <li class="nav-item">
-          <a class="nav-link" routerLink="/admin-dashboard">Admin</a>
+          <a class="nav-link text-warning fw-bold" routerLink="/admin-dashboard">
+            @if (userRole === 'Admin') { Admin Panel }
+            @else if (userRole === 'Seller') { Seller Portal }
+            @else { Agent Dashboard }
+          </a>
         </li>
         }
 
