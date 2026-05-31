@@ -14,6 +14,7 @@ import { Router } from '@angular/router';
 })
 export class AdminDashboard implements OnInit { 
 
+  activeTab: string = 'addProperty';
   propertyObj: any = {
     title: '',
     location: '',
