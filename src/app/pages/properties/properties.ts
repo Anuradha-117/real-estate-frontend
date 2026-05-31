@@ -1,10 +1,12 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Property } from '../../services/property';
+import { InquiryService } from '../../services/inquiry';
 
 @Component({
   selector: 'app-properties',
   standalone: true,
-  imports: [],
+  imports: [FormsModule],
   templateUrl: './properties.html',
   styleUrl: './properties.css'
 })
@@ -19,7 +21,17 @@ export class Properties implements OnInit {
     return list.filter(p => p.status === filter);
   });
 
-  constructor(private propertyService: Property) { }
+  showModal = false;
+  inquiryObj: any = {
+    propertyId: null,
+    message: '',
+    contactNumber: ''
+  };
+
+  constructor(
+    private propertyService: Property,
+    private inquiryService: InquiryService
+  ) { }
 
   ngOnInit(): void {
     this.propertyService.getAllProperties().subscribe({
@@ -36,4 +48,45 @@ export class Properties implements OnInit {
     this.currentFilter.set(status);
   }
 
+  openInquiry(propertyId: number) {
+    // login chck
+    const userStr = localStorage.getItem('loggedUser');
+    if (!userStr) {
+      alert('Please log in to contact an agent.');
+      return;
+    }
+
+    // form
+    this.inquiryObj.propertyId = propertyId;
+    this.inquiryObj.message = '';
+    this.inquiryObj.contactNumber = '';
+    this.showModal = true;
+  }
+
+  closeInquiry() {
+    this.showModal = false;
+  }
+
+  submitInquiry() {
+    const userStr = localStorage.getItem('loggedUser');
+    if (userStr) {
+      const user = JSON.parse(userStr);
+
+      const finalInquiry = {
+        ...this.inquiryObj,
+        customerEmail: user.email
+      };
+
+      this.inquiryService.submitInquiry(finalInquiry).subscribe({
+        next: (res) => {
+          alert('Inquiry sent successfully! An agent will contact you soon.');
+          this.closeInquiry();
+        },
+        error: (err) => {
+          console.error('Error sending inquiry', err);
+          alert('Failed to send inquiry. Please try again.');
+        }
+      });
+    }
+  }
 }

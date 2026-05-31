@@ -1,4 +1,4 @@
-<div class="container mt-4">
+<div class="container mt-4 mb-5">
   <div class="row">
     <div class="col-12 mb-3">
       <h2>Property Listings</h2>
@@ -20,34 +20,71 @@
     </div>
 
     @for (property of filteredProperties(); track property.id) {
-      
     <div class="col-md-4 mb-4">
       <div class="card shadow-sm h-100">
-        <img src="/property_placeholder.jpg" 
-       class="card-img-top" 
-       alt="Real Estate Property" 
-       style="height: 220px; object-fit: cover;">
+        <img src="/property_placeholder.jpg" class="card-img-top" alt="Real Estate Property"
+          style="height: 220px; object-fit: cover;">
         <div class="card-body">
-          <h5 class="card-title">{{ property.title }}</h5>
-          <h6 class="card-subtitle mb-2 text-muted">{{ property.location }}</h6>
+          <h5 class="card-title fw-bold">{{ property.title }}</h5>
+          <h6 class="card-subtitle mb-2 text-muted"><i class="bi bi-geo-alt-fill"></i> {{ property.location }}</h6>
           <p class="card-text mt-3">
             <strong>Price:</strong> LKR {{ property.price }}<br>
             <strong>Type:</strong> {{ property.propertyType }}
           </p>
 
-          <span class="badge" [class.bg-success]="property.status === 'Available'"
-            [class.bg-warning]="property.status === 'Rented'" [class.bg-danger]="property.status === 'Sold'">
-            {{ property.status }}
-          </span>
+          <div class="d-flex justify-content-between align-items-center mt-4">
+            <span class="badge" [class.bg-success]="property.status === 'Available'"
+              [class.bg-warning]="property.status === 'Rented'" [class.bg-danger]="property.status === 'Sold'">
+              {{ property.status }}
+            </span>
+
+            @if (property.status === 'Available') {
+            <button class="btn btn-sm btn-outline-primary fw-bold" (click)="openInquiry(property.id)">
+              Contact Agent
+            </button>
+            }
+          </div>
+
         </div>
       </div>
     </div>
     } @empty {
     <div class="col-12">
-      <div class="alert alert-warning text-center">
+      <div class="alert alert-warning text-center shadow-sm">
         No properties found in this category.
       </div>
     </div>
     }
   </div>
 </div>
+
+@if (showModal) {
+<div class="modal d-block bg-dark bg-opacity-50" tabindex="-1" style="backdrop-filter: blur(4px);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title fw-bold">Contact Agent</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="closeInquiry()"></button>
+      </div>
+      <div class="modal-body bg-light">
+        <form>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Your Message</label>
+            <textarea class="form-control" name="message" [(ngModel)]="inquiryObj.message" rows="4"
+              placeholder="Hi, I am interested in scheduling a visit for this property..."></textarea>
+          </div>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Contact Number</label>
+            <input type="text" class="form-control" name="contactNumber" [(ngModel)]="inquiryObj.contactNumber"
+              placeholder="e.g., 077 123 4567">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer bg-light border-top-0">
+        <button type="button" class="btn btn-secondary" (click)="closeInquiry()">Cancel</button>
+        <button type="button" class="btn btn-primary px-4" (click)="submitInquiry()">Send Inquiry</button>
+      </div>
+    </div>
+  </div>
+</div>
+}
