@@ -14,7 +14,7 @@ export class UserService {
         return this.http.post(`${this.apiUrl}/register`, userData);
     }
 
-    // send email and password to match
+    // send email and psswrd to match
     login(credentials: any): Observable<any> {
         return this.http.post(`${this.apiUrl}/login`, credentials);
     }
