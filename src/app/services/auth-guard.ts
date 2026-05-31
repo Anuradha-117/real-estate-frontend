@@ -8,12 +8,15 @@ export const authGuard: CanActivateFn = (route, state) => {
   if (userStr) {
     const user = JSON.parse(userStr);
 
-    if (user.role && user.role.toLowerCase() === 'admin') {
-      return true;
+    if (user.role) {
+      const role = user.role.toLowerCase();
+      if (role === 'admin' || role === 'seller' || role === 'agent') {
+        return true;
+      }
     }
   }
 
-  alert('Access Denied! You must be an Administrator to view this page.');
+  alert('Access Denied! You must be an authorized staff to view this page.');
   router.navigate(['/login']);
   return false;
 };
