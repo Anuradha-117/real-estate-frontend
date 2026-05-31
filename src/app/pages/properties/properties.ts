@@ -48,6 +48,15 @@ export class Properties implements OnInit {
     this.currentFilter.set(status);
   }
 
+  canInquire(): boolean {
+    const userStr = localStorage.getItem('loggedUser');
+    if (!userStr) {
+      return true; //make sure contact btn is not showng or guests
+    }
+    const user = JSON.parse(userStr);
+    return user.role === 'Customer'; // Only show to Customers
+  }
+
   openInquiry(propertyId: number) {
     // login chck
     const userStr = localStorage.getItem('loggedUser');

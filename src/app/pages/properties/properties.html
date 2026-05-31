@@ -38,7 +38,7 @@
               {{ property.status }}
             </span>
 
-            @if (property.status === 'Available') {
+            @if (property.status === 'Available' && canInquire()) {
             <button class="btn btn-sm btn-outline-primary fw-bold" (click)="openInquiry(property.id)">
               Contact Agent
             </button>
