@@ -37,6 +37,9 @@ export class AdminDashboard implements OnInit {
   };
 
   inquiryList: any[] = [];
+  propertyList: any[] = [];
+  showEditModal: boolean = false;
+  editPropertyObj: any = {};
 
   constructor(
     private propertyService: Property,
@@ -54,6 +57,8 @@ export class AdminDashboard implements OnInit {
 
       if (this.userRole === 'Agent') {
         this.activeTab = 'inquiries';
+      } else if (this.userRole === 'Seller' || this.userRole === 'Admin') {
+        this.loadProperties(); // Load properties for the table!
       }
     }
     this.loadUsers();
@@ -61,12 +66,12 @@ export class AdminDashboard implements OnInit {
   }
 
   saveProperty() {
-    console.log("Sending this to the database:", this.propertyObj);
-
     this.propertyService.addProperty(this.propertyObj).subscribe({
       next: (res) => {
         alert('Property Saved Successfully!');
-        this.router.navigate(['/properties']);
+        this.propertyObj = { title: '', location: '', price: null, propertyType: '', status: 'Available' };
+        this.loadProperties(); 
+        this.activeTab = 'manageProperties';
       },
       error: (err) => {
         alert('Error saving property. Check the console.');
@@ -109,6 +114,56 @@ export class AdminDashboard implements OnInit {
       },
       error: (err) => {
         console.error("Error loading inquiries", err);
+      }
+    });
+  }
+
+  loadProperties() {
+    this.propertyService.getAllProperties().subscribe({
+      next: (res) => {
+        this.propertyList = res;
+        this.cdr.detectChanges();
+      },
+      error: (err) => console.error("Error loading properties", err)
+    });
+  }
+
+  deleteProperty(id: number) {
+    const isSure = confirm("Are you sure you want to completely delete this property?");
+    if (isSure) {
+      this.propertyService.deleteProperty(id).subscribe({
+        next: (res) => {
+          alert('Property deleted successfully!');
+          this.loadProperties(); 
+        },
+        error: (err) => {
+          console.error("Error deleting property", err);
+          alert('Failed to delete property.');
+        }
+      });
+    }
+  }
+
+  openEditModal(property: any) {
+    //used the spread oprator to create a copy so we dont accidentally edit the live table data b4 saving
+    this.editPropertyObj = { ...property };
+    this.showEditModal = true;
+  }
+
+  closeEditModal() {
+    this.showEditModal = false;
+  }
+
+  updateProperty() {
+    this.propertyService.updateProperty(this.editPropertyObj.id, this.editPropertyObj).subscribe({
+      next: (res) => {
+        alert('Property updated successfully!');
+        this.closeEditModal();
+        this.loadProperties(); 
+      },
+      error: (err) => {
+        console.error("Error updating property", err);
+        alert('Failed to update property.');
       }
     });
   }

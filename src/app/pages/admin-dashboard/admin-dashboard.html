@@ -1,6 +1,5 @@
 <div class="container mt-5 mb-5">
-
-  <!-- DYNAMIC DASHBOARD TITLE                    -->
+ <!-- DYNAMIC DASHBOARD TITLE-->
   <div class="row mb-4">
     <div class="col-12">
       <h2 class="fw-bold border-bottom pb-2 text-primary">
@@ -12,10 +11,15 @@
     </div>
   </div>
 
-
-  <!-- SMART ROLE-BASED TABS NAVIGATION           -->
+  <!-- SMART ROLE-BASED TABS NAVIGATION -->
   <ul class="nav nav-tabs mb-4 fw-bold">
     @if (userRole === 'Admin' || userRole === 'Seller') {
+    <li class="nav-item">
+      <a class="nav-link text-dark" [class.active]="activeTab === 'manageProperties'"
+        (click)="activeTab = 'manageProperties'" style="cursor: pointer;">
+        <i class="bi bi-building me-2"></i>Manage Properties
+      </a>
+    </li>
     <li class="nav-item">
       <a class="nav-link text-dark" [class.active]="activeTab === 'addProperty'" (click)="activeTab = 'addProperty'"
         style="cursor: pointer;">
@@ -49,7 +53,65 @@
     }
   </ul>
 
-  <!-- ADD PROPERTY TAB                        -->
+  <!-- ADD PROPERTY TAB-->
+  @if (activeTab === 'manageProperties') {
+  <div class="row justify-content-center animation-fade-in">
+    <div class="col-md-12">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">Property Inventory</h3>
+          <button class="btn btn-sm btn-outline-light" (click)="loadProperties()">Refresh List</button>
+        </div>
+        <div class="card-body p-0">
+          <table class="table table-striped table-hover mb-0">
+            <thead class="table-light">
+              <tr>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Location</th>
+                <th>Price (LKR)</th>
+                <th>Type</th>
+                <th>Status</th>
+                <th class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (property of propertyList; track property.id) {
+              <tr>
+                <td class="fw-bold">{{ property.id }}</td>
+                <td>{{ property.title }}</td>
+                <td>{{ property.location }}</td>
+                <td>{{ property.price }}</td>
+                <td>{{ property.propertyType }}</td>
+                <td>
+                  <span class="badge" [class.bg-success]="property.status === 'Available'"
+                    [class.bg-warning]="property.status === 'Rented'" [class.bg-danger]="property.status === 'Sold'">
+                    {{ property.status }}
+                  </span>
+                </td>
+                <td class="text-center">
+                  <button class="btn btn-sm btn-primary me-2" (click)="openEditModal(property)">
+                    <i class="bi bi-pencil-square"></i> Edit
+                  </button>
+                  <button class="btn btn-sm btn-danger" (click)="deleteProperty(property.id)">
+                    <i class="bi bi-trash-fill"></i> Delete
+                  </button>
+                </td>
+              </tr>
+              } @empty {
+              <tr>
+                <td colspan="7" class="text-center text-muted py-4">No properties listed yet.</td>
+              </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!--Add Property Tab-->
   @if (activeTab === 'addProperty') {
   <div class="row justify-content-center animation-fade-in">
     <div class="col-md-8">
@@ -106,7 +168,7 @@
   </div>
   }
 
-  <!-- REGISTER STAFF TAB                      -->
+  <!-- REGISTER STAFF TAB -->
   @if (activeTab === 'registerStaff') {
   <div class="row justify-content-center animation-fade-in">
     <div class="col-md-8">
@@ -152,8 +214,7 @@
   </div>
   }
 
-
-  <!-- USERS TABLE TAB                         -->
+  <!-- USERS TABLE TAB-->
   @if (activeTab === 'users') {
   <div class="row justify-content-center animation-fade-in">
     <div class="col-md-10">
@@ -199,7 +260,7 @@
   </div>
   }
 
-  <!-- VIEW INQUIRIES TAB                  -->
+  <!-- VIEW INQUIRIES TAB-->
   @if (activeTab === 'inquiries') {
   <div class="row justify-content-center animation-fade-in">
     <div class="col-md-12">
@@ -246,3 +307,57 @@
   }
 
 </div>
+
+@if (showEditModal) {
+<div class="modal d-block bg-dark bg-opacity-50" tabindex="-1" style="backdrop-filter: blur(4px);">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content shadow-lg border-0">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title fw-bold">Edit Property #{{ editPropertyObj.id }}</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="closeEditModal()"></button>
+      </div>
+      <div class="modal-body bg-light">
+        <form>
+          <div class="mb-3">
+            <label class="form-label fw-bold">Property Title</label>
+            <input type="text" name="editTitle" [(ngModel)]="editPropertyObj.title" class="form-control">
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Location</label>
+              <input type="text" name="editLocation" [(ngModel)]="editPropertyObj.location" class="form-control">
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Price (LKR)</label>
+              <input type="number" name="editPrice" [(ngModel)]="editPropertyObj.price" class="form-control">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Property Type</label>
+              <select name="editPropertyType" [(ngModel)]="editPropertyObj.propertyType" class="form-select">
+                <option value="House">House</option>
+                <option value="Apartment">Apartment</option>
+                <option value="Commercial">Commercial</option>
+                <option value="Land">Land</option>
+              </select>
+            </div>
+            <div class="col-md-6 mb-3">
+              <label class="form-label fw-bold">Status</label>
+              <select name="editStatus" [(ngModel)]="editPropertyObj.status" class="form-select">
+                <option value="Available">Available</option>
+                <option value="Sold">Sold</option>
+                <option value="Rented">Rented</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer bg-light border-top-0">
+        <button type="button" class="btn btn-secondary" (click)="closeEditModal()">Cancel</button>
+        <button type="button" class="btn btn-primary px-4" (click)="updateProperty()">Save Changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+}

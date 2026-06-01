@@ -17,5 +17,13 @@ export class Property {
   addProperty(propertyData: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/add`, propertyData);
   }
+
+  updateProperty(id: number, propertyData: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/update/${id}`, propertyData);
+  }
+
+  deleteProperty(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/delete/${id}`);
+  }
   
 }
