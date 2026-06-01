@@ -10,7 +10,7 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-admin-dashboard',
   standalone: true,
-  imports: [FormsModule,CommonModule], //uses to read from inputs
+  imports: [FormsModule, CommonModule], //uses to read from inputs
   templateUrl: './admin-dashboard.html',
   styleUrl: './admin-dashboard.css'
 })
@@ -66,11 +66,17 @@ export class AdminDashboard implements OnInit {
   }
 
   saveProperty() {
+    const userStr = localStorage.getItem('loggedUser');
+
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      this.propertyObj.sellerEmail = user.email;
+    }
     this.propertyService.addProperty(this.propertyObj).subscribe({
       next: (res) => {
         alert('Property Saved Successfully!');
         this.propertyObj = { title: '', location: '', price: null, propertyType: '', status: 'Available' };
-        this.loadProperties(); 
+        this.loadProperties();
         this.activeTab = 'manageProperties';
       },
       error: (err) => {
@@ -121,7 +127,15 @@ export class AdminDashboard implements OnInit {
   loadProperties() {
     this.propertyService.getAllProperties().subscribe({
       next: (res) => {
-        this.propertyList = res;
+        if (this.userRole === 'Seller') {
+          const userStr = localStorage.getItem('loggedUser');
+          if (userStr) {
+            const user = JSON.parse(userStr);
+            this.propertyList = res.filter((p: any) => p.sellerEmail === user.email);
+          }
+        } else {
+          this.propertyList = res;
+        }
         this.cdr.detectChanges();
       },
       error: (err) => console.error("Error loading properties", err)
@@ -134,7 +148,7 @@ export class AdminDashboard implements OnInit {
       this.propertyService.deleteProperty(id).subscribe({
         next: (res) => {
           alert('Property deleted successfully!');
-          this.loadProperties(); 
+          this.loadProperties();
         },
         error: (err) => {
           console.error("Error deleting property", err);
@@ -159,7 +173,7 @@ export class AdminDashboard implements OnInit {
       next: (res) => {
         alert('Property updated successfully!');
         this.closeEditModal();
-        this.loadProperties(); 
+        this.loadProperties();
       },
       error: (err) => {
         console.error("Error updating property", err);
