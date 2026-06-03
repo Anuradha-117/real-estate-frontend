@@ -1,5 +1,5 @@
 <div class="container mt-5 mb-5">
- <!-- DYNAMIC DASHBOARD TITLE-->
+  <!-- DYNAMIC DASHBOARD TITLE-->
   <div class="row mb-4">
     <div class="col-12">
       <h2 class="fw-bold border-bottom pb-2 text-primary">
@@ -177,35 +177,40 @@
           <h3 class="mb-0">Register System Staff</h3>
         </div>
         <div class="card-body bg-light">
-          <form>
+          <form #staffForm="ngForm">
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label fw-bold">Full Name</label>
                 <input type="text" name="name" [(ngModel)]="staffObj.name" class="form-control"
-                  placeholder="e.g., John Doe">
+                  placeholder="e.g., John Doe" required>
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label fw-bold">Email</label>
                 <input type="email" name="email" [(ngModel)]="staffObj.email" class="form-control"
-                  placeholder="agent@system.com">
+                  placeholder="agent@system.com" #staffEmail="ngModel"
+                  pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
+                @if (staffEmail.invalid && (staffEmail.dirty || staffEmail.touched)) {
+                <div class="text-danger small mt-1 fw-bold">Please enter a valid email address.</div>
+                }
               </div>
             </div>
             <div class="row">
               <div class="col-md-6 mb-3">
                 <label class="form-label fw-bold">Password</label>
                 <input type="password" name="password" [(ngModel)]="staffObj.password" class="form-control"
-                  placeholder="Create a password">
+                  placeholder="Create a password" required>
               </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label fw-bold">Assign Role</label>
-                <select name="role" [(ngModel)]="staffObj.role" class="form-select">
+                <select name="role" [(ngModel)]="staffObj.role" class="form-select" required>
                   <option value="Agent">Agent</option>
                   <option value="Seller">Seller</option>
                 </select>
               </div>
             </div>
             <div class="d-grid mt-4">
-              <button type="button" (click)="registerStaff()" class="btn btn-success btn-lg">Create Account</button>
+              <button type="button" (click)="registerStaff()" class="btn btn-success btn-lg"
+                [disabled]="staffForm.invalid">Create Account</button>
             </div>
           </form>
         </div>

@@ -62,28 +62,35 @@
 <div class="modal d-block bg-dark bg-opacity-50" tabindex="-1" style="backdrop-filter: blur(4px);">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content shadow-lg border-0">
+      
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title fw-bold">Contact Agent</h5>
         <button type="button" class="btn-close btn-close-white" (click)="closeInquiry()"></button>
       </div>
+      
       <div class="modal-body bg-light">
-        <form>
+        <form #inquiryForm="ngForm">
           <div class="mb-3">
             <label class="form-label fw-bold">Your Message</label>
             <textarea class="form-control" name="message" [(ngModel)]="inquiryObj.message" rows="4"
-              placeholder="Hi, I am interested in scheduling a visit for this property..."></textarea>
+              placeholder="Hi, I am interested in scheduling a visit for this property..." required></textarea>
           </div>
           <div class="mb-3">
             <label class="form-label fw-bold">Contact Number</label>
             <input type="text" class="form-control" name="contactNumber" [(ngModel)]="inquiryObj.contactNumber"
-              placeholder="e.g., 077 123 4567">
+              placeholder="e.g., 077 123 4567" #contactNum="ngModel" pattern="^\+?[0-9]{10,14}$" required>
+            @if (contactNum.invalid && (contactNum.dirty || contactNum.touched)) {
+              <div class="text-danger small mt-1 fw-bold">Please enter a valid 10-digit number or use +country code.</div>
+            }
           </div>
         </form>
       </div>
+      
       <div class="modal-footer bg-light border-top-0">
         <button type="button" class="btn btn-secondary" (click)="closeInquiry()">Cancel</button>
-        <button type="button" class="btn btn-primary px-4" (click)="submitInquiry()">Send Inquiry</button>
+        <button type="button" class="btn btn-primary px-4" (click)="submitInquiry()" [disabled]="inquiryForm.invalid">Send Inquiry</button>
       </div>
+      
     </div>
   </div>
 </div>

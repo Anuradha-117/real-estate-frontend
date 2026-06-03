@@ -1,23 +1,30 @@
 <div class="container mt-5">
   <div class="row align-items-stretch">
-    
+
     <div class="col-md-6 mb-4">
       <div class="card shadow-lg h-100">
         <div class="card-header bg-dark text-white text-center">
           <h3 class="mb-0">Welcome Back</h3>
         </div>
         <div class="card-body bg-light p-4">
-          <form>
+          <form #loginForm="ngForm">
             <div class="mb-3">
               <label class="form-label fw-bold">Email address</label>
-              <input type="email" name="loginEmail" [(ngModel)]="loginObj.email" class="form-control" placeholder="name@example.com">
+              <input type="email" name="loginEmail" [(ngModel)]="loginObj.email" class="form-control"
+                placeholder="example@gmail.com" #loginEmail="ngModel"
+                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
+              @if (loginEmail.invalid && (loginEmail.dirty || loginEmail.touched)) {
+              <div class="text-danger small mt-1 fw-bold">Please enter a valid email address.</div>
+              }
             </div>
             <div class="mb-4">
               <label class="form-label fw-bold">Password</label>
-              <input type="password" name="loginPassword" [(ngModel)]="loginObj.password" class="form-control" placeholder="Enter password">
+              <input type="password" name="loginPassword" [(ngModel)]="loginObj.password" class="form-control"
+                placeholder="Enter password" required>
             </div>
             <div class="d-grid">
-              <button type="button" class="btn btn-primary btn-lg" (click)="onLogin()">Login</button>
+              <button type="button" class="btn btn-primary btn-lg" (click)="onLogin()"
+                [disabled]="loginForm.invalid">Login</button>
             </div>
           </form>
         </div>
@@ -30,21 +37,29 @@
           <h3 class="mb-0">Create an Account</h3>
         </div>
         <div class="card-body p-4">
-          <form>
+          <form #registerForm="ngForm">
             <div class="mb-3">
               <label class="form-label fw-bold">Full Name</label>
-              <input type="text" name="registerName" [(ngModel)]="registerObj.name" class="form-control" placeholder="John Doe">
+              <input type="text" name="registerName" [(ngModel)]="registerObj.name" class="form-control"
+                placeholder="Anuradha Lakruwan" required>
             </div>
             <div class="mb-3">
               <label class="form-label fw-bold">Email address</label>
-              <input type="email" name="registerEmail" [(ngModel)]="registerObj.email" class="form-control" placeholder="name@example.com">
+              <input type="email" name="registerEmail" [(ngModel)]="registerObj.email" class="form-control"
+                placeholder="name@example.com" #registerEmail="ngModel"
+                pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" required>
+              @if (registerEmail.invalid && (registerEmail.dirty || registerEmail.touched)) {
+              <div class="text-danger small mt-1 fw-bold">Please enter a valid email address.</div>
+              }
             </div>
             <div class="mb-4">
               <label class="form-label fw-bold">Password</label>
-              <input type="password" name="registerPassword" [(ngModel)]="registerObj.password" class="form-control" placeholder="Create a password">
+              <input type="password" name="registerPassword" [(ngModel)]="registerObj.password" class="form-control"
+                placeholder="Create a password" required>
             </div>
             <div class="d-grid">
-              <button type="button" class="btn btn-outline-primary btn-lg" (click)="onRegister()">Register</button>
+              <button type="button" class="btn btn-outline-primary btn-lg" (click)="onRegister()"
+                [disabled]="registerForm.invalid">Register</button>
             </div>
           </form>
         </div>
