@@ -98,6 +98,22 @@ export class AdminDashboard implements OnInit {
     });
   }
 
+  deleteUser(id: number) {
+    const isSure = confirm("Are you sure you want to completely remove this user from the system?");
+    if (isSure) {
+      this.userService.deleteUser(id).subscribe({
+        next: (res) => {
+          alert('User deleted successfully!');
+          this.loadUsers();
+        },
+        error: (err) => {
+          console.error("Error deleting user", err);
+          alert('Failed to delete user.');
+        }
+      });
+    }
+  }
+
   registerStaff() {
     this.userService.register(this.staffObj).subscribe({
       next: (res) => {

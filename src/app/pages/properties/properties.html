@@ -78,9 +78,9 @@
           <div class="mb-3">
             <label class="form-label fw-bold">Contact Number</label>
             <input type="text" class="form-control" name="contactNumber" [(ngModel)]="inquiryObj.contactNumber"
-              placeholder="e.g., 077 123 4567" #contactNum="ngModel" pattern="^\+?[0-9]{10,14}$" required>
+              placeholder="e.g., 077 123 4567" #contactNum="ngModel" pattern="^(\+94[0-9]{9}|0[0-9]{9})$" required>
             @if (contactNum.invalid && (contactNum.dirty || contactNum.touched)) {
-              <div class="text-danger small mt-1 fw-bold">Please enter a valid 10-digit number or use +country code.</div>
+              <div class="text-danger small mt-1 fw-bold">Please enter a valid phone number.</div>
             }
           </div>
         </form>
