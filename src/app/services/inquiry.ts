@@ -20,4 +20,8 @@ export class InquiryService {
   getInquiriesForProperty(propertyId: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/property/${propertyId}`);
   }
+
+  resolveInquiry(id: number): Observable<any> {
+    return this.http.put(`${this.apiUrl}/resolve/${id}`, {});
+  }
 }

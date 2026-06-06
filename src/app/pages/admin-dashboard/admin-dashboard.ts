@@ -124,6 +124,22 @@ export class AdminDashboard implements OnInit {
     });
   }
 
+  resolveInquiry(id: number) {
+    const isSure = confirm("Are you sure you want to mark this inquiry as resolved?");
+    if (isSure) {
+      this.inquiryService.resolveInquiry(id).subscribe({
+        next: (res) => {
+          alert('Inquiry marked as resolved!');
+          this.loadInquiries();
+        },
+        error: (err) => {
+          console.error("Error resolving inquiry", err);
+          alert('Failed to resolve inquiry.');
+        }
+      });
+    }
+  }
+
   loadProperties() {
     this.propertyService.getAllProperties().subscribe({
       next: (res) => {
