@@ -40,6 +40,7 @@ export class AdminDashboard implements OnInit {
   propertyList: any[] = [];
   showEditModal: boolean = false;
   editPropertyObj: any = {};
+  selectedFile: File | null = null;
 
   constructor(
     private propertyService: Property,
@@ -65,19 +66,27 @@ export class AdminDashboard implements OnInit {
     this.loadInquiries();
   }
 
-  saveProperty() {
+saveProperty() {
     const userStr = localStorage.getItem('loggedUser');
 
     if (userStr) {
-      const user = JSON.parse(userStr);
-      this.propertyObj.sellerEmail = user.email;
+      this.propertyObj.sellerEmail = JSON.parse(userStr).email;
     }
-    this.propertyService.addProperty(this.propertyObj).subscribe({
+
+    const formData = new FormData();
+    formData.append('property', JSON.stringify(this.propertyObj));
+    
+    if (this.selectedFile) {
+      formData.append('file', this.selectedFile);
+    }
+
+    this.propertyService.addProperty(formData).subscribe({
       next: (res) => {
         alert('Property Saved Successfully!');
         this.propertyObj = { title: '', location: '', price: null, propertyType: '', status: 'Available' };
-        this.loadProperties();
-        this.activeTab = 'manageProperties';
+        this.selectedFile = null;
+        this.loadProperties(); 
+        this.activeTab = 'manageProperties'; 
       },
       error: (err) => {
         alert('Error saving property. Check the console.');
@@ -212,5 +221,9 @@ export class AdminDashboard implements OnInit {
         alert('Failed to update property.');
       }
     });
+  }
+
+  onFileSelected(event: any) {
+    this.selectedFile = event.target.files[0];
   }
 }
