@@ -21,9 +21,14 @@
 
     @for (property of filteredProperties(); track property.id) {
     <div class="col-md-4 mb-4">
+
       <div class="card shadow-sm h-100">
-        <img [src]="property.imageUrl ? 'http://localhost:8080' + property.imageUrl : '/property_placeholder.jpeg'" 
-             class="card-img-top" alt="Real Estate Property" style="height: 220px; object-fit: cover;">
+        <img [src]="property.imageUrl ? 'http://localhost:8080' + property.imageUrl : '/property_placeholder.jpeg'"
+          class="card-img-top" alt="Real Estate Property"
+          style="height: 220px; object-fit: cover; cursor: pointer; transition: transform 0.3s ease;"
+          onmouseover="this.style.transform='scale(1.02)'" onmouseout="this.style.transform='scale(1)'"
+          (click)="openImageModal(property.imageUrl)">
+
         <div class="card-body">
           <h5 class="card-title fw-bold">{{ property.title }}</h5>
           <h6 class="card-subtitle mb-2 text-muted"><i class="bi bi-geo-alt-fill"></i> {{ property.location }}</h6>
@@ -62,12 +67,12 @@
 <div class="modal d-block bg-dark bg-opacity-50" tabindex="-1" style="backdrop-filter: blur(4px);">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content shadow-lg border-0">
-      
+
       <div class="modal-header bg-primary text-white">
         <h5 class="modal-title fw-bold">Contact Agent</h5>
         <button type="button" class="btn-close btn-close-white" (click)="closeInquiry()"></button>
       </div>
-      
+
       <div class="modal-body bg-light">
         <form #inquiryForm="ngForm">
           <div class="mb-3">
@@ -80,17 +85,37 @@
             <input type="text" class="form-control" name="contactNumber" [(ngModel)]="inquiryObj.contactNumber"
               placeholder="e.g., 077 123 4567" #contactNum="ngModel" pattern="^(\+94[0-9]{9}|0[0-9]{9})$" required>
             @if (contactNum.invalid && (contactNum.dirty || contactNum.touched)) {
-              <div class="text-danger small mt-1 fw-bold">Please enter a valid phone number.</div>
+            <div class="text-danger small mt-1 fw-bold">Please enter a valid phone number.</div>
             }
           </div>
         </form>
       </div>
-      
+
       <div class="modal-footer bg-light border-top-0">
         <button type="button" class="btn btn-secondary" (click)="closeInquiry()">Cancel</button>
-        <button type="button" class="btn btn-primary px-4" (click)="submitInquiry()" [disabled]="inquiryForm.invalid">Send Inquiry</button>
+        <button type="button" class="btn btn-primary px-4" (click)="submitInquiry()"
+          [disabled]="inquiryForm.invalid">Send Inquiry</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+}
+
+@if (showImageModal) {
+<div class="modal d-block bg-dark bg-opacity-75" tabindex="-1" style="backdrop-filter: blur(6px);" (click)="closeImageModal()">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content bg-transparent border-0">
+      
+      <div class="modal-header border-0 pb-0 justify-content-end">
+        <button type="button" class="btn-close btn-close-white fs-4" (click)="closeImageModal()" aria-label="Close" style="z-index: 1055;"></button>
       </div>
       
+      <div class="modal-body text-center pt-0">
+        <img [src]="selectedImageUrl" class="img-fluid rounded shadow-lg" 
+             style="max-height: 85vh; width: auto; object-fit: contain;" 
+             alt="Enlarged Property" (click)="$event.stopPropagation()">
+      </div>
     </div>
   </div>
 </div>

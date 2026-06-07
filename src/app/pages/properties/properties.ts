@@ -27,6 +27,8 @@ export class Properties implements OnInit {
     message: '',
     contactNumber: ''
   };
+  showImageModal: boolean = false;
+  selectedImageUrl: string = '';
 
   constructor(
     private propertyService: Property,
@@ -97,5 +99,14 @@ export class Properties implements OnInit {
         }
       });
     }
+  }
+
+  openImageModal(imageUrl: string) {
+    this.selectedImageUrl = imageUrl ? 'http://localhost:8080' + imageUrl : '/property_placeholder.jpeg';
+    this.showImageModal = true;
+  }
+
+  closeImageModal() {
+    this.showImageModal = false;
   }
 }
