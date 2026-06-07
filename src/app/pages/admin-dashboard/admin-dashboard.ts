@@ -85,6 +85,11 @@ export class AdminDashboard implements OnInit {
   }
 
   saveProperty() {
+
+    if (!this.propertyObj.title || !this.propertyObj.location || !this.propertyObj.price || !this.propertyObj.propertyType) {
+      alert('Please fill in all required fields (Title, Location, Price, and Type) before saving.');
+      return;
+    }
     const userStr = localStorage.getItem('loggedUser');
 
     if (userStr) {
