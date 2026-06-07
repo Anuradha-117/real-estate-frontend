@@ -51,6 +51,14 @@
       </a>
     </li>
     }
+    @if (userRole === 'Admin') {
+    <li class="nav-item">
+      <a class="nav-link text-dark" [class.active]="activeTab === 'reports'" (click)="activeTab = 'reports'; generateMISReport()"
+        style="cursor: pointer;">
+        <i class="bi bi-bar-chart-fill me-2"></i>System Reports
+      </a>
+    </li>
+    }
   </ul>
 
   <!-- ADD PROPERTY TAB-->
@@ -150,9 +158,9 @@
                 </select>
               </div>
               <div class="mb-3">
-              <label class="form-label fw-bold">Upload Property Image</label>
-              <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*">
-            </div>
+                <label class="form-label fw-bold">Upload Property Image</label>
+                <input type="file" class="form-control" (change)="onFileSelected($event)" accept="image/*">
+              </div>
               <div class="col-md-6 mb-3">
                 <label class="form-label fw-bold">Status</label>
                 <select name="status" [(ngModel)]="propertyObj.status" class="form-select">
@@ -240,7 +248,8 @@
                 <th>Name</th>
                 <th>Email</th>
                 <th>Role</th>
-                <th class="text-center">Action</th> </tr>
+                <th class="text-center">Action</th>
+              </tr>
             </thead>
             <tbody>
               @for (user of userList; track user.id) {
@@ -293,7 +302,8 @@
                 <th>Prop ID</th>
                 <th>Message</th>
                 <th>Status</th>
-                <th class="text-center">Action</th> </tr>
+                <th class="text-center">Action</th>
+              </tr>
             </thead>
             <tbody>
               @for (inquiry of inquiryList; track inquiry.id) {
@@ -304,17 +314,18 @@
                 <td class="text-center fw-bold text-primary">#{{ inquiry.propertyId }}</td>
                 <td><em>"{{ inquiry.message }}"</em></td>
                 <td>
-                  <span class="badge" [class.bg-warning]="inquiry.status === 'Pending'" [class.bg-success]="inquiry.status === 'Resolved'">
+                  <span class="badge" [class.bg-warning]="inquiry.status === 'Pending'"
+                    [class.bg-success]="inquiry.status === 'Resolved'">
                     {{ inquiry.status }}
                   </span>
                 </td>
                 <td class="text-center">
                   @if (inquiry.status === 'Pending') {
-                    <button class="btn btn-sm btn-success fw-bold" (click)="resolveInquiry(inquiry.id)">
-                      <i class="bi bi-check-circle"></i> Resolve
-                    </button>
+                  <button class="btn btn-sm btn-success fw-bold" (click)="resolveInquiry(inquiry.id)">
+                    <i class="bi bi-check-circle"></i> Resolve
+                  </button>
                   } @else {
-                    <span class="text-muted small fw-bold"><i class="bi bi-check2-all"></i> Done</span>
+                  <span class="text-muted small fw-bold"><i class="bi bi-check2-all"></i> Done</span>
                   }
                 </td>
               </tr>
@@ -383,6 +394,58 @@
         <button type="button" class="btn btn-primary px-4" (click)="updateProperty()">Save Changes</button>
       </div>
     </div>
+  </div>
+</div>
+}
+
+@if (activeTab === 'reports') {
+<div class="row justify-content-center animation-fade-in">
+  <div class="col-md-12">
+    <h3 class="fw-bold mb-4">Management Information System (MIS) Overview</h3>
+
+    <div class="row text-center">
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0 h-100 bg-primary text-white">
+          <div class="card-body py-4">
+            <h1 class="display-4 fw-bold">{{ reportData.totalProperties }}</h1>
+            <h5 class="fw-bold mb-3">Total Properties</h5>
+            <div class="d-flex justify-content-around small">
+              <span>Available: {{ reportData.availableProperties }}</span>
+              <span>Sold: {{ reportData.soldProperties }}</span>
+              <span>Rented: {{ reportData.rentedProperties }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+        <div class="card shadow-sm border-0 h-100 bg-warning text-dark">
+          <div class="card-body py-4">
+            <h1 class="display-4 fw-bold">{{ reportData.totalInquiries }}</h1>
+            <h5 class="fw-bold mb-3">Total Inquiries</h5>
+            <div class="d-flex justify-content-around small">
+              <span>Pending: {{ reportData.pendingInquiries }}</span>
+              <span>Resolved: {{ reportData.resolvedInquiries }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4 mb-4">
+          <div class="card shadow-sm border-0 h-100 bg-success text-white">
+            <div class="card-body py-4">
+              <h1 class="display-4 fw-bold">{{ reportData.totalUsers }}</h1>
+              <h5 class="fw-bold mb-3">Total Registered Users</h5>
+              <div class="d-flex justify-content-around small">
+                <span>Agents: {{ reportData.totalAgents }}</span>
+                <span>Sellers: {{ reportData.totalSellers }}</span>
+                <span>Customers: {{ reportData.totalCustomers }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+
   </div>
 </div>
 }

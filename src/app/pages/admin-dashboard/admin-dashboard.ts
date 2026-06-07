@@ -41,6 +41,19 @@ export class AdminDashboard implements OnInit {
   showEditModal: boolean = false;
   editPropertyObj: any = {};
   selectedFile: File | null = null;
+  reportData = {
+    totalProperties: 0,
+    availableProperties: 0,
+    soldProperties: 0,
+    rentedProperties: 0,
+    totalUsers: 0,
+    totalAgents: 0,
+    totalSellers: 0,
+    totalCustomers: 0,
+    totalInquiries: 0,
+    pendingInquiries: 0,
+    resolvedInquiries: 0
+  };
 
   constructor(
     private propertyService: Property,
@@ -64,9 +77,14 @@ export class AdminDashboard implements OnInit {
     }
     this.loadUsers();
     this.loadInquiries();
+
+    setTimeout(() => {
+      this.generateMISReport();
+    }, 500);
+
   }
 
-saveProperty() {
+  saveProperty() {
     const userStr = localStorage.getItem('loggedUser');
 
     if (userStr) {
@@ -75,7 +93,7 @@ saveProperty() {
 
     const formData = new FormData();
     formData.append('property', JSON.stringify(this.propertyObj));
-    
+
     if (this.selectedFile) {
       formData.append('file', this.selectedFile);
     }
@@ -85,8 +103,8 @@ saveProperty() {
         alert('Property Saved Successfully!');
         this.propertyObj = { title: '', location: '', price: null, propertyType: '', status: 'Available' };
         this.selectedFile = null;
-        this.loadProperties(); 
-        this.activeTab = 'manageProperties'; 
+        this.loadProperties();
+        this.activeTab = 'manageProperties';
       },
       error: (err) => {
         alert('Error saving property. Check the console.');
@@ -98,7 +116,7 @@ saveProperty() {
   loadUsers() {
     this.userService.getAllUsers().subscribe({
       next: (res) => {
-        this.userList = res;
+        this.userList = res.filter((user: any) => user.role !== 'Admin');
         this.cdr.detectChanges();
       },
       error: (err) => {
@@ -225,5 +243,24 @@ saveProperty() {
 
   onFileSelected(event: any) {
     this.selectedFile = event.target.files[0];
+  }
+
+  generateMISReport() {
+    // Cout Properties
+    this.reportData.totalProperties = this.propertyList.length;
+    this.reportData.availableProperties = this.propertyList.filter(p => p.status === 'Available').length;
+    this.reportData.soldProperties = this.propertyList.filter(p => p.status === 'Sold').length;
+    this.reportData.rentedProperties = this.propertyList.filter(p => p.status === 'Rented').length;
+
+    // Count Users
+    this.reportData.totalUsers = this.userList.length;
+    this.reportData.totalAgents = this.userList.filter(u => u.role === 'Agent').length;
+    this.reportData.totalSellers = this.userList.filter(u => u.role === 'Seller').length;
+    this.reportData.totalCustomers = this.userList.filter(u => u.role === 'Customer').length;
+
+    // Count Inquiris
+    this.reportData.totalInquiries = this.inquiryList.length;
+    this.reportData.pendingInquiries = this.inquiryList.filter(i => i.status === 'Pending').length;
+    this.reportData.resolvedInquiries = this.inquiryList.filter(i => i.status === 'Resolved').length;
   }
 }
