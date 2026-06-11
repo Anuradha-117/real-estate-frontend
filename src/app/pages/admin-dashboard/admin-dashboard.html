@@ -1,4 +1,5 @@
 <div class="container mt-5 mb-5">
+
   <!-- DYNAMIC DASHBOARD TITLE-->
   <div class="row mb-4">
     <div class="col-12">
@@ -12,114 +13,56 @@
   </div>
 
   <!-- SMART ROLE-BASED TABS NAVIGATION -->
-  <ul class="nav nav-tabs mb-4 fw-bold">
+  <ul class="nav nav-tabs row g-0 mb-4 fw-bold">
     @if (userRole === 'Admin' || userRole === 'Seller') {
-    <li class="nav-item">
-      <a class="nav-link text-dark" [class.active]="activeTab === 'manageProperties'"
+    <li class="nav-item col-6 col-md-auto">
+      <a class="nav-link text-dark text-center" [class.active]="activeTab === 'manageProperties'"
         (click)="activeTab = 'manageProperties'" style="cursor: pointer;">
-        <i class="bi bi-building me-2"></i>Manage Properties
+        <i class="bi bi-building d-block d-md-inline mb-1 me-md-2"></i>Manage Properties
       </a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link text-dark" [class.active]="activeTab === 'addProperty'" (click)="activeTab = 'addProperty'"
-        style="cursor: pointer;">
-        <i class="bi bi-house-add-fill me-2"></i>Add Property
+    <li class="nav-item col-6 col-md-auto">
+      <a class="nav-link text-dark text-center" [class.active]="activeTab === 'addProperty'"
+        (click)="activeTab = 'addProperty'" style="cursor: pointer;">
+        <i class="bi bi-house-add-fill d-block d-md-inline mb-1 me-md-2"></i>Add Property
       </a>
     </li>
     }
 
     @if (userRole === 'Admin') {
-    <li class="nav-item">
-      <a class="nav-link text-dark" [class.active]="activeTab === 'registerStaff'" (click)="activeTab = 'registerStaff'"
-        style="cursor: pointer;">
-        <i class="bi bi-person-plus-fill me-2"></i>Register Staff
+    <li class="nav-item col-6 col-md-auto">
+      <a class="nav-link text-dark text-center" [class.active]="activeTab === 'registerStaff'"
+        (click)="activeTab = 'registerStaff'" style="cursor: pointer;">
+        <i class="bi bi-person-plus-fill d-block d-md-inline mb-1 me-md-2"></i>Register Staff
       </a>
     </li>
-    <li class="nav-item">
-      <a class="nav-link text-dark" [class.active]="activeTab === 'users'" (click)="activeTab = 'users'"
+    <li class="nav-item col-6 col-md-auto">
+      <a class="nav-link text-dark text-center" [class.active]="activeTab === 'users'" (click)="activeTab = 'users'"
         style="cursor: pointer;">
-        <i class="bi bi-people-fill me-2"></i>Manage Users
+        <i class="bi bi-people-fill d-block d-md-inline mb-1 me-md-2"></i>Manage Users
       </a>
     </li>
     }
 
     @if (userRole === 'Admin' || userRole === 'Agent') {
-    <li class="nav-item">
-      <a class="nav-link text-dark" [class.active]="activeTab === 'inquiries'" (click)="activeTab = 'inquiries'"
-        style="cursor: pointer;">
-        <i class="bi bi-envelope-fill me-2"></i>View Inquiries
+    <li class="nav-item col-6 col-md-auto">
+      <a class="nav-link text-dark text-center" [class.active]="activeTab === 'inquiries'"
+        (click)="activeTab = 'inquiries'" style="cursor: pointer;">
+        <i class="bi bi-envelope-fill d-block d-md-inline mb-1 me-md-2"></i>View Inquiries
       </a>
     </li>
     }
     @if (userRole === 'Admin') {
-    <li class="nav-item">
-      <a class="nav-link text-dark" [class.active]="activeTab === 'reports'" (click)="activeTab = 'reports'; generateMISReport()"
-        style="cursor: pointer;">
-        <i class="bi bi-bar-chart-fill me-2"></i>System Reports
+    <li class="nav-item col-6 col-md-auto">
+      <a class="nav-link text-dark text-center" [class.active]="activeTab === 'reports'"
+        (click)="activeTab = 'reports'; generateMISReport()" style="cursor: pointer;">
+        <i class="bi bi-bar-chart-fill d-block d-md-inline mb-1 me-md-2"></i>System Reports
       </a>
     </li>
     }
   </ul>
 
   <!-- ADD PROPERTY TAB-->
-  @if (activeTab === 'manageProperties') {
-  <div class="row justify-content-center animation-fade-in">
-    <div class="col-md-12">
-      <div class="card shadow-lg border-0">
-        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
-          <h3 class="mb-0">Property Inventory</h3>
-          <button class="btn btn-sm btn-outline-light" (click)="loadProperties()">Refresh List</button>
-        </div>
-        <div class="card-body p-0">
-          <table class="table table-striped table-hover mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>ID</th>
-                <th>Title</th>
-                <th>Location</th>
-                <th>Price (LKR)</th>
-                <th>Type</th>
-                <th>Status</th>
-                <th class="text-center">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (property of propertyList; track property.id) {
-              <tr>
-                <td class="fw-bold">{{ property.id }}</td>
-                <td>{{ property.title }}</td>
-                <td>{{ property.location }}</td>
-                <td>{{ property.price }}</td>
-                <td>{{ property.propertyType }}</td>
-                <td>
-                  <span class="badge" [class.bg-success]="property.status === 'Available'"
-                    [class.bg-warning]="property.status === 'Rented'" [class.bg-danger]="property.status === 'Sold'">
-                    {{ property.status }}
-                  </span>
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-primary me-2" (click)="openEditModal(property)">
-                    <i class="bi bi-pencil-square"></i> Edit
-                  </button>
-                  <button class="btn btn-sm btn-danger" (click)="deleteProperty(property.id)">
-                    <i class="bi bi-trash-fill"></i> Delete
-                  </button>
-                </td>
-              </tr>
-              } @empty {
-              <tr>
-                <td colspan="7" class="text-center text-muted py-4">No properties listed yet.</td>
-              </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
-  }
-
-  <!--Add Property Tab-->
   @if (activeTab === 'addProperty') {
   <div class="row justify-content-center animation-fade-in">
     <div class="col-md-8">
@@ -174,6 +117,68 @@
               <button type="button" (click)="saveProperty()" class="btn btn-primary btn-lg">Save Property</button>
             </div>
           </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  }
+
+  <!-- VIEW PROPERTY TAB-->
+  @if (activeTab === 'manageProperties') {
+  <div class="row justify-content-center animation-fade-in">
+    <div class="col-md-12">
+      <div class="card shadow-lg border-0">
+        <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+          <h3 class="mb-0">Property Inventory</h3>
+          <button class="btn btn-sm btn-outline-light" (click)="loadProperties()">Refresh List</button>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Title</th>
+                  <th>Location</th>
+                  <th>Price (LKR)</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th class="text-center">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (property of propertyList; track property.id) {
+                <tr>
+                  <td class="fw-bold align-middle">{{ property.id }}</td>
+                  <td class="align-middle">{{ property.title }}</td>
+                  <td class="align-middle">{{ property.location }}</td>
+                  <td class="align-middle">{{ property.price }}</td>
+                  <td class="align-middle">{{ property.propertyType }}</td>
+                  <td class="align-middle">
+                    <span class="badge" [class.bg-success]="property.status === 'Available'"
+                      [class.bg-warning]="property.status === 'Rented'" [class.bg-danger]="property.status === 'Sold'">
+                      {{ property.status }}
+                    </span>
+                  </td>
+                  <td class="text-center align-middle">
+                    <div class="d-flex justify-content-center gap-2">
+                      <button class="btn btn-sm btn-primary" title="Edit" (click)="openEditModal(property)">
+                        <i class="bi bi-pencil-square"></i><span class="d-none d-md-inline ms-1">Edit</span>
+                      </button>
+                      <button class="btn btn-sm btn-danger" title="Delete" (click)="deleteProperty(property.id)">
+                        <i class="bi bi-trash-fill"></i><span class="d-none d-md-inline ms-1">Delete</span>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+                } @empty {
+                <tr>
+                  <td colspan="7" class="text-center text-muted py-4">No properties listed yet.</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -241,42 +246,44 @@
           <button class="btn btn-sm btn-outline-light" (click)="loadUsers()">Refresh Table</button>
         </div>
         <div class="card-body p-0">
-          <table class="table table-striped table-hover mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-                <th class="text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (user of userList; track user.id) {
-              <tr>
-                <td class="fw-bold">{{ user.id }}</td>
-                <td>{{ user.name }}</td>
-                <td>{{ user.email }}</td>
-                <td>
-                  <span class="badge" [class.bg-primary]="user.role === 'Admin'"
-                    [class.bg-success]="user.role === 'Agent'" [class.bg-warning]="user.role === 'Seller'"
-                    [class.bg-secondary]="user.role === 'Customer'">
-                    {{ user.role }}
-                  </span>
-                </td>
-                <td class="text-center">
-                  <button class="btn btn-sm btn-danger fw-bold" (click)="deleteUser(user.id)">
-                    <i class="bi bi-trash-fill"></i> Remove
-                  </button>
-                </td>
-              </tr>
-              } @empty {
-              <tr>
-                <td colspan="5" class="text-center text-muted py-3">No users found.</td>
-              </tr>
-              }
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Role</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (user of userList; track user.id) {
+                <tr>
+                  <td class="fw-bold align-middle">{{ user.id }}</td>
+                  <td class="align-middle">{{ user.name }}</td>
+                  <td class="align-middle">{{ user.email }}</td>
+                  <td class="align-middle">
+                    <span class="badge" [class.bg-primary]="user.role === 'Admin'"
+                      [class.bg-success]="user.role === 'Agent'" [class.bg-warning]="user.role === 'Seller'"
+                      [class.bg-secondary]="user.role === 'Customer'">
+                      {{ user.role }}
+                    </span>
+                  </td>
+                  <td class="text-center align-middle">
+                    <button class="btn btn-sm btn-danger fw-bold" title="Remove" (click)="deleteUser(user.id)">
+                      <i class="bi bi-trash-fill"></i><span class="d-none d-md-inline ms-1">Remove</span>
+                    </button>
+                  </td>
+                </tr>
+                } @empty {
+                <tr>
+                  <td colspan="5" class="text-center text-muted py-3">No users found.</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
@@ -293,55 +300,57 @@
           <button class="btn btn-sm btn-outline-light" (click)="loadInquiries()">Refresh Table</button>
         </div>
         <div class="card-body p-0">
-          <table class="table table-striped table-hover mb-0">
-            <thead class="table-light">
-              <tr>
-                <th>Date</th>
-                <th>Customer Email</th>
-                <th>Phone</th>
-                <th>Prop ID</th>
-                <th>Message</th>
-                <th>Status</th>
-                <th class="text-center">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (inquiry of inquiryList; track inquiry.id) {
-              <tr>
-                <td>{{ inquiry.inquiryDate | date:'shortDate' }}</td>
-                <td class="fw-bold">{{ inquiry.customerEmail }}</td>
-                <td>{{ inquiry.contactNumber }}</td>
-                <td class="text-center fw-bold text-primary">#{{ inquiry.propertyId }}</td>
-                <td><em>"{{ inquiry.message }}"</em></td>
-                <td>
-                  <span class="badge" [class.bg-warning]="inquiry.status === 'Pending'"
-                    [class.bg-success]="inquiry.status === 'Resolved'">
-                    {{ inquiry.status }}
-                  </span>
-                </td>
-                <td class="text-center">
-                  @if (inquiry.status === 'Pending') {
-                  <button class="btn btn-sm btn-success fw-bold" (click)="resolveInquiry(inquiry.id)">
-                    <i class="bi bi-check-circle"></i> Resolve
-                  </button>
-                  } @else {
-                  <span class="text-muted small fw-bold"><i class="bi bi-check2-all"></i> Done</span>
-                  }
-                </td>
-              </tr>
-              } @empty {
-              <tr>
-                <td colspan="7" class="text-center text-muted py-4">No inquiries found.</td>
-              </tr>
-              }
-            </tbody>
-          </table>
+          <div class="table-responsive">
+            <table class="table table-striped table-hover mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th>Date</th>
+                  <th>Customer Email</th>
+                  <th>Phone</th>
+                  <th>Prop ID</th>
+                  <th>Message</th>
+                  <th>Status</th>
+                  <th class="text-center">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (inquiry of inquiryList; track inquiry.id) {
+                <tr>
+                  <td class="align-middle">{{ inquiry.inquiryDate | date:'shortDate' }}</td>
+                  <td class="fw-bold align-middle">{{ inquiry.customerEmail }}</td>
+                  <td class="align-middle">{{ inquiry.contactNumber }}</td>
+                  <td class="text-center fw-bold text-primary align-middle">#{{ inquiry.propertyId }}</td>
+                  <td class="align-middle" style="min-width: 250px;"><em>"{{ inquiry.message }}"</em></td>
+                  <td class="align-middle">
+                    <span class="badge" [class.bg-warning]="inquiry.status === 'Pending'"
+                      [class.bg-success]="inquiry.status === 'Resolved'">
+                      {{ inquiry.status }}
+                    </span>
+                  </td>
+                  <td class="text-center align-middle">
+                    @if (inquiry.status === 'Pending') {
+                    <button class="btn btn-sm btn-success fw-bold" title="Resolve" (click)="resolveInquiry(inquiry.id)">
+                      <i class="bi bi-check-circle"></i><span class="d-none d-md-inline ms-1">Resolve</span>
+                    </button>
+                    } @else {
+                    <span class="text-muted small fw-bold" title="Done"><i class="bi bi-check2-all"></i><span
+                        class="d-none d-md-inline ms-1">Done</span></span>
+                    }
+                  </td>
+                </tr>
+                } @empty {
+                <tr>
+                  <td colspan="7" class="text-center text-muted py-4">No inquiries found.</td>
+                </tr>
+                }
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
   </div>
   }
-
 </div>
 
 @if (showEditModal) {
@@ -432,18 +441,18 @@
       </div>
 
       <div class="col-md-4 mb-4">
-          <div class="card shadow-sm border-0 h-100 bg-success text-white">
-            <div class="card-body py-4">
-              <h1 class="display-4 fw-bold">{{ reportData.totalUsers }}</h1>
-              <h5 class="fw-bold mb-3">Total Registered Users</h5>
-              <div class="d-flex justify-content-around small">
-                <span>Agents: {{ reportData.totalAgents }}</span>
-                <span>Sellers: {{ reportData.totalSellers }}</span>
-                <span>Customers: {{ reportData.totalCustomers }}</span>
-              </div>
+        <div class="card shadow-sm border-0 h-100 bg-success text-white">
+          <div class="card-body py-4">
+            <h1 class="display-4 fw-bold">{{ reportData.totalUsers }}</h1>
+            <h5 class="fw-bold mb-3">Total Registered Users</h5>
+            <div class="d-flex justify-content-around small">
+              <span>Agents: {{ reportData.totalAgents }}</span>
+              <span>Sellers: {{ reportData.totalSellers }}</span>
+              <span>Customers: {{ reportData.totalCustomers }}</span>
             </div>
           </div>
         </div>
+      </div>
     </div>
 
   </div>
